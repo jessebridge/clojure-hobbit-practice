@@ -1,5 +1,8 @@
 (ns clojure-beginner.core
-  (:gen-class))
+    (:gen-class))
+
+(defn -main []
+      (print "HEY"))
 
 
 (def asym-hobbit-body-parts [{:name "head" :size 3}
@@ -22,41 +25,52 @@
                              {:name "left-achilles" :size 1}
                              {:name "left-foot" :size 2}])
 
+
 (defn matching-part
-  [part]
-  {:name (clojure.string/replace (:name part) #"^left-" "right-")
-   :size (:size part)})
+      [part]
+      {:name (clojure.string/replace (:name part) #"^left-" "right-")
+       :size (:size part)})
 
 (defn symmetrize-body-parts
-  "Expects a seq of maps that have a :name and :size"
-  [asym-body-parts]
-  (reduce
-   (fn [final-body-parts part]
-     (into final-body-parts (set [part (matching-part part)])))
-   []
-   asym-body-parts))
+      "Expects a seq of maps that have a :name and :size"
+      [asym-body-parts]
+      (reduce
+        (fn [final-body-parts part]
+            (into final-body-parts (set [part (matching-part part)])))
+        []
+        asym-body-parts))
 
 
 (defn hit
-  [asym-body-parts]
-  "Expects a seq of maps that have :name and :size determines which part is hit"
-  "Takes in the original list of body parts, semitrizes them, adds the numbers and decides which part is hit"
-  (let [sym-parts          (symmetrize-body-parts asym-body-parts)
-        body-part-size-sum (reduce + (map :size sym-parts))
-;        body-part-names (reduce conj [] (map :name sym-parts))
-        target             (rand body-part-size-sum)]
-;    (print body-part-size-sum)
-;    (print body-part-names)
-    (loop [[part & remaining] sym-parts
-           acumulated-size    (:size part)]
-      (if (> acumulated-size target)
-        part
-        (recur remaining (+ acumulated-size (:size (first remaining))))))))
+      [asym-body-parts]
+      "Expects a seq of maps that have :name and :size determines which part is hit"
+      "Takes in the original list of body parts, semitrizes them, adds the numbers and decides which part is hit"
+      (let [sym-parts (symmetrize-body-parts asym-body-parts)
+            body-part-size-sum (reduce + (map :size sym-parts))
+            ;body-part-names (reduce conj [] (map :name sym-parts))
+            target (rand body-part-size-sum)]
+           ;(print body-part-size-sum)
+           ;(print body-part-names)
+           (loop [[part & remaining] sym-parts
+                  acumulated-size (:size part)]
+                 (if (> acumulated-size target)
+                   part
+                   (recur remaining (+ acumulated-size (:size (first remaining))))))))
+
+
+(defn simple-join-strings
+      [string-one string-two]
+      (str string-one " " string-two))
+
+(defn less-simple-join-strings [vector-of-strings]
+      (clojure.string/join " " vector-of-strings))
+
+
+
+
 
 
 "prints the body part that was hit"
-(print(hit asym-hobbit-body-parts))
-
-
-
-
+(println (hit asym-hobbit-body-parts))
+(println (simple-join-strings "hello" "Jesse"))
+(println (less-simple-join-strings ["hello" "its" "me" "I" "was" "wondering" "after" "all" "these" "years" "you" "remember" "me"]))
