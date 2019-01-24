@@ -81,10 +81,11 @@
 (defn map-2-level-deep-example [{{:keys [key1 key3 key10 key5]}:a}]
       (str key1 " " key3 " " key10 " " key5))
 
-;(defn map-multiple-level-deep-example [map-values]
-;      (let [{{:keys [a]}map-values} first-level
-;            {{:keys [bedrooms]}first-level} number-bedrooms]
-;        (integer number-bedrooms)))
+(defn map-multiple-level-deep-example [map-values]
+      (let [{:keys [a]}map-values
+            {:keys [houseDetails] :as house-details-map}a
+            {:keys [bedrooms]}houseDetails]
+           (str "number of bedrooms*  " bedrooms "  *The original house details map that is nested in the second level  " house-details-map)))
 
 (defn dissociate-with-thread-first [{:keys [bedroom bathrooms sqft] :as house-details}]
       (-> house-details
@@ -106,6 +107,6 @@
 (println (reduce-map-example {:a "Thanks" :b "for" :c "trying" :d "sweety" :e "but" :f "no" :g "luck"}))
 (println (map-simple-example {:a "very" :c "blah" :e "cool" :g "kanye" :b "wow" :n "dude" :p "okay"}))
 (println (map-2-level-deep-example {:a {:key1 "hello" :key2 "asdasd" :key3 "my" :key4 "asdasd" :key5 "jeff" :key10 "name"} :b "haha"}))
-;(println (map-multiple-level-deep-example {:a {:houseDetails {:kitchen "big" :bedrooms "5" :pool "no"}}:b "hey"}))
+(println (map-multiple-level-deep-example {:a {:houseDetails {:kitchen "big" :bedrooms "5" :pool "no"}}:b "hey"}))
 (println (dissociate-with-thread-first {:bedrooms 5 :bathrooms 3 :sqft 400 :weatherType "dry" :playGolf "yeah"}))
 (println (associate-with-thread-first {:a "I" :b "Come" :c "from"}))
